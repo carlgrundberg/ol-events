@@ -2,6 +2,8 @@ import { Event, getDbClient } from "@/lib/db";
 import dayjs from "dayjs";
 import { getEvents } from "eventor-api";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const supabaseClient = getDbClient();
 

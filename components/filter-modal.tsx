@@ -22,7 +22,15 @@ export default function FilterModal({ filter }: { filter: Filter }) {
 
   return (
     <>
-      <Button onPress={onOpen}>Filtrera</Button>
+      <div className="flex flex-row gap-2">
+        <Button size="sm">
+          {filter.from} - {filter.to}
+        </Button>
+        {filter.q && <Button size="sm">Sökord: &quot;{filter.q}&quot;</Button>}
+        <Button color="primary" onPress={onOpen} size="sm">
+          Ändra filter
+        </Button>
+      </div>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
         <ModalContent>

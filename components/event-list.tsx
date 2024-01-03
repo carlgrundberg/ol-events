@@ -1,25 +1,10 @@
 import { Event } from "@/lib/db";
-import {
-  Button,
-  Input,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { createClient } from "@supabase/supabase-js";
-import dayjs from "dayjs";
 import ClientTable from "./client-table";
+import { Filter } from "./filter-modal";
 
-export type EventListProps = {
-  q: string;
-  from: string;
-  to: string;
-};
-
-async function getEvents({ q, from, to }: EventListProps) {
+async function getEvents(filter: Filter) {
   const supabaseClient = createClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_KEY!
@@ -27,19 +12,16 @@ async function getEvents({ q, from, to }: EventListProps) {
   const { data } = await supabaseClient
     .from("events")
     .select("*")
-    .gte("date", from)
-    .lte("date", to)
-    .like("name", `%${q}%`)
+    .gte("date", filter.from)
+    .lte("date", filter.to)
+    .like("name", `%${filter.q}%`)
     .order("date");
 
   return data as Event[];
 }
 
-export default async function EventList(props: EventListProps) {
-  const from = props.from || dayjs().format("YYYY-MM-DD");
-  const to = props.to || dayjs().add(30, "days").format("YYYY-MM-DD");
-  const q = props.q || "";
-  const events = await getEvents({ q, from, to });
+export default async function EventList({ filter }: { filter: Filter }) {
+  const events = await getEvents(filter);
 
   const columns = [
     {
@@ -74,39 +56,5 @@ export default async function EventList(props: EventListProps) {
     ),
   }));
 
-  return (
-    <>
-      <div className="mb-4">
-        <form action="" method="GET">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            <Input
-              size="sm"
-              name="from"
-              type="date"
-              placeholder="Från"
-              defaultValue={from}
-            />
-            <Input
-              size="sm"
-              name="to"
-              type="date"
-              placeholder="Till"
-              defaultValue={to}
-            />
-            <Input
-              size="sm"
-              name="q"
-              type="text"
-              placeholder="Sökord"
-              defaultValue={q}
-            />
-            <Button type="submit" color="primary" size="lg" fullWidth>
-              Sök
-            </Button>
-          </div>
-        </form>
-      </div>
-      <ClientTable label="Event list" columns={columns} items={items} />
-    </>
-  );
+  return <ClientTable label="Event list" columns={columns} items={items} />;
 }

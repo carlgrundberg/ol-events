@@ -12,8 +12,6 @@ export async function GET() {
     toDate: dayjs().add(1, "month").format("YYYY-MM-DD"),
   });
 
-  console.log(events[1]);
-
   const mappedEvents: Event[] = events.map((e) => ({
     id: parseInt(e.eventid, 10),
     name: e.name,

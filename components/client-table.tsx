@@ -29,7 +29,7 @@ export default function ClientTable({
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
-      <TableBody items={items}>
+      <TableBody items={items} emptyContent={"Inga tävlingar matchar filtret."}>
         {(item) => (
           <TableRow key={item.key}>
             {(columnKey) => <TableCell>{item[columnKey]}</TableCell>}

@@ -14,6 +14,8 @@ async function getEvents(filter: Filter) {
     .select("*")
     .gte("date", filter.from)
     .lte("date", filter.to)
+    .in("classificationId", [filter.c])
+    .in("disciplineId", [filter.d])
     .like("name", `%${filter.q}%`)
     .order("date");
 

@@ -1,5 +1,7 @@
 "use client";
 
+import classifications from "@/lib/classifications";
+import disciplines from "@/lib/disciplines";
 import {
   Button,
   Input,
@@ -8,6 +10,8 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Select,
+  SelectItem,
   useDisclosure,
 } from "@nextui-org/react";
 
@@ -15,6 +19,8 @@ export type Filter = {
   q: string;
   from: string;
   to: string;
+  c: string[];
+  d: string[];
 };
 
 export default function FilterModal({ filter }: { filter: Filter }) {
@@ -22,11 +28,25 @@ export default function FilterModal({ filter }: { filter: Filter }) {
 
   return (
     <>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row gap-2 justify-center">
         <Button size="sm">
           {filter.from} - {filter.to}
         </Button>
         {filter.q && <Button size="sm">Sökord: &quot;{filter.q}&quot;</Button>}
+        {filter.d.length > 0 && filter.d.length < disciplines.length && (
+          <Button size="sm">
+            {filter.d
+              .map((d) => disciplines.find((di) => di.value === d)?.label)
+              .join(", ")}
+          </Button>
+        )}
+        {filter.c.length > 0 && filter.c.length < classifications.length && (
+          <Button size="sm">
+            {filter.c
+              .map((c) => classifications.find((cl) => cl.value === c)?.label)
+              .join(", ")}
+          </Button>
+        )}
         <Button color="primary" onPress={onOpen} size="sm">
           Ändra filter
         </Button>
@@ -56,6 +76,35 @@ export default function FilterModal({ filter }: { filter: Filter }) {
                     defaultValue={filter.to}
                   />
                 </div>
+                <Select
+                  label="Gren"
+                  size="sm"
+                  name="d"
+                  selectionMode="multiple"
+                  defaultSelectedKeys={filter.d}
+                >
+                  {disciplines.map((discipline) => (
+                    <SelectItem key={discipline.key} value={discipline.value}>
+                      {discipline.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+                <Select
+                  label="Tävlingstyp"
+                  size="sm"
+                  name="c"
+                  selectionMode="multiple"
+                  defaultSelectedKeys={filter.c}
+                >
+                  {classifications.map((classification) => (
+                    <SelectItem
+                      key={classification.key}
+                      value={classification.value}
+                    >
+                      {classification.label}
+                    </SelectItem>
+                  ))}
+                </Select>
                 <Input
                   size="sm"
                   name="q"

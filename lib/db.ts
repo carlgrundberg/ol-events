@@ -6,6 +6,8 @@ export type Event = {
   date: string;
   lat: number | null;
   lng: number | null;
+  classificationId: number | null;
+  disciplineId: number | null;
 };
 
 export function getDbClient() {

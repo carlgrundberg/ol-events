@@ -22,6 +22,8 @@ export async function GET() {
     lng: e.eventrace.eventcenterposition?.y
       ? parseFloat(e.eventrace.eventcenterposition.y)
       : null,
+    classificationId: parseInt(e.eventclassificationid, 10),
+    disciplineId: parseInt(e.disciplineid, 10),
   }));
 
   const { error } = await supabaseClient.from("events").upsert(mappedEvents);

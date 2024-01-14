@@ -25,7 +25,7 @@ export default function ClientTable({
   items,
 }: ClientTableProps) {
   return (
-    <Table aria-label={label} isStriped>
+    <Table aria-label={label} isStriped hideHeader>
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>

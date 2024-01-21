@@ -16,11 +16,11 @@ export async function GET() {
     id: parseInt(e.eventid, 10),
     name: e.name,
     date: e.startdate.date,
-    lat: e.eventrace.eventcenterposition?.x
-      ? parseFloat(e.eventrace.eventcenterposition.x)
-      : null,
-    lng: e.eventrace.eventcenterposition?.y
+    lat: e.eventrace.eventcenterposition?.y
       ? parseFloat(e.eventrace.eventcenterposition.y)
+      : null,
+    lng: e.eventrace.eventcenterposition?.x
+      ? parseFloat(e.eventrace.eventcenterposition.x)
       : null,
     classificationId: parseInt(e.eventclassificationid, 10),
     disciplineId: parseInt(e.disciplineid, 10),

@@ -30,6 +30,7 @@ export default function Home({ searchParams }: { searchParams: Filter }) {
       searchParams.d,
       disciplines.map((d) => d.value)
     ),
+    dt: searchParams.dt || 100,
   };
 
   return (

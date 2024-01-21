@@ -12,6 +12,7 @@ import {
   ModalHeader,
   Select,
   SelectItem,
+  Slider,
   useDisclosure,
 } from "@nextui-org/react";
 
@@ -21,6 +22,7 @@ export type Filter = {
   to: string;
   c: string[];
   d: string[];
+  dt: number;
 };
 
 export default function FilterModal({ filter }: { filter: Filter }) {
@@ -47,6 +49,7 @@ export default function FilterModal({ filter }: { filter: Filter }) {
               .join(", ")}
           </Button>
         )}
+        {filter.dt < 100 && <Button size="sm">Inom {filter.dt} mil</Button>}
         <Button color="primary" onPress={onOpen} size="sm">
           Ändra filter
         </Button>
@@ -105,6 +108,20 @@ export default function FilterModal({ filter }: { filter: Filter }) {
                     </SelectItem>
                   ))}
                 </Select>
+                <Slider
+                  label="Max avstånd"
+                  name="dt"
+                  size="sm"
+                  step={1}
+                  maxValue={100}
+                  minValue={1}
+                  defaultValue={filter.dt}
+                  getValue={(v) => {
+                    return Array.isArray(v) && v[0] === 100
+                      ? "Oändligt"
+                      : `${v} mil`;
+                  }}
+                />
                 <Input
                   size="sm"
                   name="q"

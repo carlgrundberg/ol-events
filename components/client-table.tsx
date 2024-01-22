@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useGeolocated } from "react-geolocated";
 
 export type ClientTableProps = {
@@ -62,12 +62,46 @@ export default function ClientTable({ events, distance }: ClientTableProps) {
     userDecisionTimeout: 5000,
     suppressLocationOnMount: true,
   });
+  const [emptyContent, setEmptyContent] = useState<string | ReactNode>(
+    distance ? "Hämtar din position..." : "Inga tävlingar hittades."
+  );
 
   useEffect(() => {
     if (distance && !coords && !positionError && isGeolocationAvailable) {
       getPosition();
     }
   }, [distance, getPosition, coords, isGeolocationAvailable, positionError]);
+
+  useEffect(() => {
+    if (distance) {
+      if (!isGeolocationAvailable) {
+        setEmptyContent("Platstjänster stöds inte i din webbläsare.");
+      } else if (!isGeolocationEnabled) {
+        setEmptyContent(
+          "Du måste tillåta platstjänster för att kunna filtrera."
+        );
+      } else if (!coords) {
+        setEmptyContent("Hämtar din position...");
+      } else if (positionError) {
+        setEmptyContent(
+          <>
+            <p>Det gick inte att hämta din position.</p>
+            <Button className="mt-4" onClick={getPosition}>
+              Försök igen
+            </Button>
+          </>
+        );
+      }
+    }
+  }, [
+    distance,
+    coords,
+    positionError,
+    isGeolocationAvailable,
+    isGeolocationEnabled,
+    setEmptyContent,
+    getPosition,
+  ]);
 
   const items = events
     .map((event) => {
@@ -97,21 +131,10 @@ export default function ClientTable({ events, distance }: ClientTableProps) {
           href={`https://eventor.orientering.se/Events/Show/${event.id}`}
           target="_blank"
         >
-          <Button color="primary">Eventor</Button>
+          <Button color="primary">Till tävling </Button>
         </a>
       ),
     }));
-
-  const emptyContent = positionError ? (
-    <>
-      <p>Du måste tillåta platstjänster för att kunna filtrera på avstånd.</p>
-      <Button className="mt-4" onClick={getPosition}>
-        Försök igen
-      </Button>
-    </>
-  ) : (
-    "Inga tävlingar matchar filtret."
-  );
 
   return (
     <Table aria-label="Event list" isStriped hideHeader>

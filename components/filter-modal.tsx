@@ -30,7 +30,7 @@ export default function FilterModal({ filter }: { filter: Filter }) {
 
   return (
     <>
-      <div className="flex flex-row gap-2 justify-center">
+      <div className="flex flex-row flex-wrap gap-2 justify-start sm:justify-center">
         <Button size="sm">
           {filter.from} - {filter.to}
         </Button>

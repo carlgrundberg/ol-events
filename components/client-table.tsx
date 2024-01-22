@@ -1,5 +1,6 @@
 "use client";
 import { Event } from "@/lib/db";
+import getDistance from "@/lib/geodist";
 import {
   Button,
   Table,
@@ -11,7 +12,6 @@ import {
 } from "@nextui-org/react";
 import { useEffect } from "react";
 import { useGeolocated } from "react-geolocated";
-import geodist from "geodist";
 
 export type ClientTableProps = {
   events: Event[];
@@ -40,11 +40,7 @@ function calcluateDistance(
 ): EventWithDistance {
   let distance;
   if (event.lat && event.lng) {
-    distance = geodist(
-      { lat, lon: lng },
-      { lat: event.lat, lon: event.lng },
-      { exact: true, unit: "km" }
-    );
+    distance = getDistance([lat, lng], [event.lat, event.lng]);
   }
   return {
     ...event,
@@ -53,7 +49,13 @@ function calcluateDistance(
 }
 
 export default function ClientTable({ events, distance }: ClientTableProps) {
-  const { coords, getPosition } = useGeolocated({
+  const {
+    coords,
+    getPosition,
+    isGeolocationAvailable,
+    isGeolocationEnabled,
+    positionError,
+  } = useGeolocated({
     positionOptions: {
       enableHighAccuracy: false,
     },
@@ -62,10 +64,10 @@ export default function ClientTable({ events, distance }: ClientTableProps) {
   });
 
   useEffect(() => {
-    if (distance && !coords) {
+    if (distance && !coords && !positionError && isGeolocationAvailable) {
       getPosition();
     }
-  }, [distance, getPosition, coords]);
+  }, [distance, getPosition, coords, isGeolocationAvailable, positionError]);
 
   const items = events
     .map((event) => {
@@ -86,9 +88,7 @@ export default function ClientTable({ events, distance }: ClientTableProps) {
           </div>
           <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
             {event.date}
-            {event.distance
-              ? ` | ${Math.round(event.distance / 10)} mil bort`
-              : ""}
+            {event.distance ? ` | ${Math.round(event.distance)} mil bort` : ""}
           </div>
         </div>
       ),
@@ -102,12 +102,23 @@ export default function ClientTable({ events, distance }: ClientTableProps) {
       ),
     }));
 
+  const emptyContent = positionError ? (
+    <>
+      <p>Du måste tillåta platstjänster för att kunna filtrera på avstånd.</p>
+      <Button className="mt-4" onClick={getPosition}>
+        Försök igen
+      </Button>
+    </>
+  ) : (
+    "Inga tävlingar matchar filtret."
+  );
+
   return (
     <Table aria-label="Event list" isStriped hideHeader>
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
-      <TableBody items={items} emptyContent={"Inga tävlingar matchar filtret."}>
+      <TableBody items={items} emptyContent={emptyContent}>
         {(item) => (
           <TableRow key={item.key}>
             {(columnKey) => (

@@ -35,6 +35,7 @@ export default function Home({ searchParams }: { searchParams: Filter }) {
 
   return (
     <main className="container mx-auto p-2 flex flex-col gap-2">
+      {JSON.stringify(searchParams.c, null, 2)}
       <FilterModal filter={filter} />
       <EventList filter={filter} />
     </main>

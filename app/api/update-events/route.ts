@@ -9,7 +9,7 @@ export async function GET() {
 
   const events = await getEvents({
     fromDate: dayjs().format("YYYY-MM-DD"),
-    toDate: dayjs().add(1, "month").format("YYYY-MM-DD"),
+    toDate: dayjs().add(3, "month").format("YYYY-MM-DD"),
   });
 
   const mappedEvents: Event[] = events.map((e) => ({

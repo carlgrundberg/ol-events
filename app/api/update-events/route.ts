@@ -31,6 +31,6 @@ export async function GET() {
   if (error) {
     return Response.json({ mesage: error.message }, { status: 500 });
   } else {
-    return Response.json({ events, mappedEvents });
+    return Response.json({ events: mappedEvents.length });
   }
 }

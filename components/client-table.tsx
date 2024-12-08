@@ -91,6 +91,8 @@ export default function ClientTable({ events, distance }: ClientTableProps) {
             </Button>
           </>
         );
+      } else {
+        setEmptyContent("Inga tävlingar hittades.");
       }
     }
   }, [

@@ -18,8 +18,8 @@ import {
 
 export type Filter = {
   q: string;
-  from: string;
-  to: string;
+  // from: string;
+  // to: string;
   c: string[];
   d: string[];
   dt: number;
@@ -31,19 +31,23 @@ export default function FilterModal({ filter }: { filter: Filter }) {
   return (
     <>
       <div className="flex flex-row flex-wrap gap-2 justify-start sm:justify-center">
-        <Button size="sm">
+        {/* <Button size="sm" onPress={onOpen}>
           {filter.from} - {filter.to}
-        </Button>
-        {filter.q && <Button size="sm">Sökord: &quot;{filter.q}&quot;</Button>}
+        </Button> */}
+        {filter.q && (
+          <Button size="sm" onPress={onOpen}>
+            Sökord: &quot;{filter.q}&quot;
+          </Button>
+        )}
         {filter.d.length > 0 && filter.d.length < disciplines.length && (
-          <Button size="sm">
+          <Button size="sm" onPress={onOpen}>
             {filter.d
               .map((d) => disciplines.find((di) => di.value === d)?.label)
               .join(", ")}
           </Button>
         )}
         {filter.c.length > 0 && filter.c.length < classifications.length && (
-          <Button size="sm">
+          <Button size="sm" onPress={onOpen}>
             {filter.c
               .map((c) => classifications.find((cl) => cl.value === c)?.label)
               .join(", ")}
@@ -63,22 +67,6 @@ export default function FilterModal({ filter }: { filter: Filter }) {
                 Filtrera
               </ModalHeader>
               <ModalBody>
-                <div className="flex flex-row gap-2">
-                  <Input
-                    label="Från"
-                    size="sm"
-                    name="from"
-                    type="date"
-                    defaultValue={filter.from}
-                  />
-                  <Input
-                    label="Till"
-                    size="sm"
-                    name="to"
-                    type="date"
-                    defaultValue={filter.to}
-                  />
-                </div>
                 <Select
                   label="Gren"
                   size="sm"

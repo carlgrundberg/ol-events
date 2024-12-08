@@ -2,7 +2,6 @@ import EventList from "@/components/event-list";
 import FilterModal, { Filter } from "@/components/filter-modal";
 import classifications from "@/lib/classifications";
 import disciplines from "@/lib/disciplines";
-import dayjs from "dayjs";
 
 function getArrayParam(
   param: string | string[] | undefined,
@@ -19,8 +18,6 @@ function getArrayParam(
 
 export default function Home({ searchParams }: { searchParams: Filter }) {
   const filter = {
-    from: searchParams.from || dayjs().format("YYYY-MM-DD"),
-    to: searchParams.to || dayjs().add(30, "days").format("YYYY-MM-DD"),
     q: searchParams.q || "",
     c: getArrayParam(
       searchParams.c,

@@ -15,6 +15,8 @@ import {
   Slider,
   useDisclosure,
 } from "@nextui-org/react";
+import { useEffect } from "react";
+import { usePiwikPro } from "@piwikpro/next-piwik-pro";
 
 export type Filter = {
   q: string;
@@ -27,6 +29,13 @@ export type Filter = {
 
 export default function FilterModal({ filter }: { filter: Filter }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { CustomEvent } = usePiwikPro();
+
+  useEffect(() => {
+    if (CustomEvent && isOpen) {
+      CustomEvent.trackEvent("Filter", "opened");
+    }
+  }, [isOpen, CustomEvent]);
 
   return (
     <>

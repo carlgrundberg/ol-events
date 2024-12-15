@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  transpilePackages: ["@piwikpro/next-piwik-pro"],
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

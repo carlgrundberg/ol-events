@@ -13,7 +13,6 @@ async function getEvents(filter: Filter) {
     .from("events")
     .select("*")
     .gte("date", dayjs().startOf("day").format("YYYY-MM-DD"))
-    // .lte("date", filter.to)
     .in("classificationId", [filter.c])
     .in("disciplineId", [filter.d])
     .like("name", `%${filter.q}%`)
@@ -28,7 +27,9 @@ export default async function EventList({ filter }: { filter: Filter }) {
   return (
     <ClientTable
       events={events}
-      distance={filter.dt < 100 ? filter.dt : undefined}
+      distance={
+        filter.dt && filter.dt !== "100" ? parseInt(filter.dt) : undefined
+      }
     />
   );
 }

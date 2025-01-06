@@ -22,16 +22,18 @@ export default function RootLayout({
         <Providers>
           <Navbar>
             <NavbarBrand className="gap-2">
-              <svg
-                height="36"
-                viewBox="0 0 500 500"
-                width="36"
-                className="rounded"
-              >
-                <path d="M502,0H0V502" fill="#FFF" />
-                <path d="M0,500H500V0" fill="#F76D22" />
-              </svg>
-              <p className="font-bold text-inherit">Orienteringstävlingar</p>
+              <a href="/" className="flex items-center gap-2">
+                <svg
+                  height="36"
+                  viewBox="0 0 500 500"
+                  width="36"
+                  className="rounded"
+                >
+                  <path d="M502,0H0V502" fill="#FFF" />
+                  <path d="M0,500H500V0" fill="#F76D22" />
+                </svg>
+                <p className="font-bold text-inherit">Orienteringstävlingar</p>
+              </a>
             </NavbarBrand>
           </Navbar>
           {children}

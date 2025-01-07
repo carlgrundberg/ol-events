@@ -18,6 +18,7 @@ import {
 import { useEffect } from "react";
 import { usePiwikPro } from "@piwikpro/next-piwik-pro";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 export type Filter = {
   q?: string;
@@ -31,7 +32,7 @@ export default function FilterModal({
   onFilterChange,
 }: {
   filter: Filter;
-  onFilterChange: (formData: FormData) => void;
+  onFilterChange: (formData?: FormData) => void;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { CustomEvent } = usePiwikPro();
@@ -41,6 +42,11 @@ export default function FilterModal({
       CustomEvent.trackEvent("Filter", "opened");
     }
   }, [isOpen, CustomEvent]);
+
+  const onFilterReset = () => {
+    onFilterChange();
+    onOpenChange();
+  };
 
   return (
     <>
@@ -134,9 +140,7 @@ export default function FilterModal({
                 />
               </ModalBody>
               <ModalFooter>
-                <a href="/">
-                  <Button>Återställ</Button>
-                </a>
+                <Button onPress={onFilterReset}>Återställ</Button>
                 <Button type="submit" color="primary">
                   Sök
                 </Button>

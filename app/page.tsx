@@ -71,24 +71,30 @@ export default async function Home({
     dt: getSingleParam(params.dt, storedFilter?.dt, "100"),
   };
 
-  async function onFilterChange(formData: FormData) {
+  async function onFilterChange(formData?: FormData) {
     "use server";
 
-    const newFilter = {
-      q: formData.get("q") as string,
-      c: formData.getAll("c"),
-      d: formData.getAll("d"),
-      dt: formData.get("dt") as string,
-    };
-
     const cookieStore = await cookies();
-    cookieStore.set("filter", JSON.stringify(newFilter));
 
-    const searchParams = new URLSearchParams(
-      formData as unknown as Record<string, string>
-    ).toString();
+    if (formData) {
+      const newFilter = {
+        q: formData.get("q") as string,
+        c: formData.getAll("c"),
+        d: formData.getAll("d"),
+        dt: formData.get("dt") as string,
+      };
 
-    redirect(`/?${searchParams}`);
+      cookieStore.set("filter", JSON.stringify(newFilter));
+
+      const searchParams = new URLSearchParams(
+        formData as unknown as Record<string, string>
+      ).toString();
+
+      redirect(`/?${searchParams}`);
+    } else {
+      cookieStore.delete("filter");
+      redirect("/");
+    }
   }
 
   return (

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
         <Providers>
           <Navbar>
             <NavbarBrand className="gap-2">
-              <a href="/" className="flex items-center gap-2">
+              <Link href="/" className="flex items-center gap-2">
                 <svg
                   height="36"
                   viewBox="0 0 500 500"
@@ -33,7 +34,7 @@ export default function RootLayout({
                   <path d="M0,500H500V0" fill="#F76D22" />
                 </svg>
                 <p className="font-bold text-inherit">Orienteringstävlingar</p>
-              </a>
+              </Link>
             </NavbarBrand>
           </Navbar>
           {children}
